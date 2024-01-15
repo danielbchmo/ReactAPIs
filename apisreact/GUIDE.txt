@@ -74,9 +74,11 @@ LOADING SYSTEM
     OR 
 
     useEffect(() => {
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => setData(data));
-            .finally(() => setLoading(false));
-        }, []);
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => setData(data));
+        .finally(() => setLoading(false));
+    }, []);
+
+    return { data, loading };
 
