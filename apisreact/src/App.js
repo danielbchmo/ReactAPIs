@@ -2,7 +2,7 @@ import './App.css';
 import { useFetch } from './useFetch';
 
 function App() {
-  const { data, loading } = useFetch(
+  const { data, loading, error } = useFetch(
     "https://jsonplaceholder.typicode.com/users"
   );
 

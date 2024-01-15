@@ -82,3 +82,18 @@ LOADING SYSTEM
 
     return { data, loading };
 
+////////////////////////////////////////////////////////////////////
+Show an error messsage
+
+We can create a code where shows to users if exists a mistake when the page loads.
+
+1. Creat another const:
+    const [error, setError] = useState(null);
+
+2. Inside the useEffect, put a .catch (this receive the error):
+
+    .catch((error) => setError(error))
+
+3. Return the error.
+
+    return { data, loading, error };
