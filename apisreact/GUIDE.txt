@@ -1,0 +1,82 @@
+API's React
+
+In this case, it'll use the own react system for connecting an API.
+
+1. Import a useState hook.
+    import { useState, useEffect } from "react";
+
+2. Create a useState const:
+    const [data, setData] = useState(null);
+
+3. Use a useEffect which it allows us to call a HTTP permisson.
+    useEffect(() => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json()) //back a promisse
+        .then((data) => setData(data)); // back the data
+    }, []);
+
+4. Inside of our main return, we have to back these datas:
+    <ul>
+        {data?.map((user) => (<li key={user.id}>{user.name}</li>
+        ))}
+    </ul>
+
+OTHER WAY TO USE AN API
+1. To avoid creating or modifying different times an api, we need to create a new file:
+    useFetch.js
+This file is a custome hook.
+
+2. Copy from the const to useEffect hook inside in a export function useFecth():
+    import { useState, useEffect } from "react";
+    export function useEffect() {
+        const [data, setData] = useState(null);
+        useEffect(() => {
+            fetch("https://jsonplaceholder.typicode.com/users")
+                .then((response) => response.json()) //back a promisse
+                .then((data) => setData(data)); // back the data
+        }, []);
+    }
+
+ENDPOINT WITH URL
+
+1. Call a function with a parameter:
+
+    import { useState, useEffect } from "react";
+
+    export function useEffect(url) {
+        const [data, setData] = useState(null);
+        useEffect(() => {
+            fetch(url)
+                .then((response) => response.json()) //back a promisse
+                .then((data) => setData(data)); // back the data
+        }, []);
+
+        return { data };
+    }
+
+//////////////////////////////////////////////////////////////////
+LOADING SYSTEM 
+
+1. Crate a new const:
+     const [loading, setLoading] = useState(true);
+
+2. Inside useEffect, we can put the useState(true) again, only for checking that all is correct:
+
+    useEffect(() => {
+        setLoading(true);
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => 
+                setLoading(false); //return false for finishing the process
+                setData(data));
+    }, []);
+
+    OR 
+
+    useEffect(() => {
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => setData(data));
+            .finally(() => setLoading(false));
+        }, []);
+
