@@ -97,3 +97,41 @@ We can create a code where shows to users if exists a mistake when the page load
 3. Return the error.
 
     return { data, loading, error };
+
+/////////////////////////////////////////////////////////////////////
+Cancel the request
+
+Imagine if you need to cancel the request because the user doesn't want to continue with your platform
+or a service. You can cancel it with a button or if the user go out of your window.
+
+1. Call the class AbortController that allows you to abort one or more Web requests as and when desired. 
+Put it inside of useEffect:
+
+    const abortController = new AbortController();
+
+2. Inside of fecth():
+
+    fetch(url, { signal: abortController.signal });
+
+3. Return abortController.abort(). This'll execute when the component has been unmounted.
+(When a component isn't visible in the screen)
+
+    return () => abortController.abort();
+
+This part avoid memory leaks
+
+OTHER WAY
+
+1. Declare a const at the beginning of the code
+    const [controller, setController] = useState(null);
+
+2. Inside of the useEffect, after the const abortController:
+    setController(abortController)
+
+3. Outside and after of useEffect, create a const handleCancelRequest:
+    const handleCancelRequest = () => {
+        if(controller){
+            abortController.abort();
+            setError("Request Cancelled");
+        }    
+    }
