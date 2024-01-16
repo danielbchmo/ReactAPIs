@@ -135,3 +135,65 @@ OTHER WAY
             setError("Request Cancelled");
         }    
     }
+
+////////////////////////////////////////////////////
+    RENDER AS YOU FETCH metodologhy
+
+1. Call fetchData:
+    const apiData = fetchData("https://jsonplaceholder.typicode.com/todos");
+
+2. Create other component where we put the code.
+
+    export function fetchData(url){
+        const promise = fetch(url);
+            .then((response) => response.json)
+            .then((data) => data);
+
+        return getSuspender(promise);//this will execute the sync
+    }
+
+3. Create the function that return the promise:
+
+    function getSuspender(promise){
+        let status = "pending";
+        let response;
+
+        const suspender = promise.then(
+            (res) => {
+                status = "success";
+                response = res;
+            },
+            (err) => {
+                status = "error";
+                response = err;
+            }
+        );
+    }
+
+4. Create a new function as read:
+
+    const read = () => {
+        switch(status){
+            case "pending":
+                throw suspender;
+            case "error":
+                throw response;
+            default:
+                response;
+        }
+    }
+
+5. Finally, return { read };
+
+6. Return to App.js and import { Suspense } from "react"
+This allows us to have more children of them, and generalize our application.
+
+7. Inside of our function App:
+
+    <Suspense fallback={<div>Loading...</div>}
+        <ul>
+            {data?.map((user) => (
+                <li key={user.id}> {user.name} </li>
+            ))}
+        </ul>
+    </Suspense>
